@@ -45,3 +45,13 @@ class PuzzleState:
 
     def _get_empty_coords(self):
         return divmod(self._get_empty_index(), PUZZLE_SIZE)
+
+    def print_board(self):
+        """
+        Ugly, yet efficient way to print the board 🙃
+        """
+        print(f" {self.board[0]} | {self.board[1]} | {self.board[2]}")
+        print("---+---+---")
+        print(f" {self.board[3]} | {self.board[4]} | {self.board[5]}")
+        print("---+---+---")
+        print(f" {self.board[6]} | {self.board[7]} | {self.board[8]}")

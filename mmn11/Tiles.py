@@ -8,23 +8,9 @@ from consts import GOAL_STATE
 from puzzle_state import PuzzleState
 
 
-def print_board(board: list):
-    """
-    Ugly, yet efficient way to print the board 🙃
-    :param board:
-    :return:
-    """
-    print(f" {board[0]} | {board[1]} | {board[2]}")
-    print("---+---+---")
-    print(f" {board[3]} | {board[4]} | {board[5]}")
-    print("---+---+---")
-    print(f" {board[6]} | {board[7]} | {board[8]}")
-
-
 def main(board: list):
     print("Initial board:")
     print_board(board)
-
 
 
 def parse_args():
