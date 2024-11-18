@@ -4,6 +4,22 @@ description: 8-Tiles Puzzle solver using 4 different algorithms
 """
 import argparse
 
+class PuzzleState:
+    def __init__(self, board: list[int], parent: 'PuzzleState' = None, action: int = None, depth=0, cost=0):
+        """
+        :param board: a list of 9 integers representing the board
+        :param parent: a reference to the parent state
+        :param action: the tile that was moved to get to this state
+        :param depth: how far from the initial state
+        :param cost: g(n) for A* search
+        """
+        self.board = board
+        self.parent = parent
+        self.action = action
+        self.depth = depth
+        self.cost = cost
+
+
 def print_board(board: list):
     """
     Ugly, yet efficient way to print the board 🙃
