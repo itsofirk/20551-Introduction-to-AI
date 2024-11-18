@@ -8,6 +8,7 @@ def bfs(start_state: PuzzleState):
     frontier = deque([start_state])  # initialize queue with start state
     explored = set()
     nodes_expanded = 0
+    current_state: PuzzleState | None = None
 
     while frontier:
         current_state = frontier.popleft()
@@ -16,6 +17,11 @@ def bfs(start_state: PuzzleState):
         explored.add(current_state)
         nodes_expanded += 1
         for child in current_state.get_successors():
-            if tuple(child.board) not in explored and child not in frontier:
+            if child not in explored and child not in frontier:
                 frontier.append(child)
-    return None, nodes_expanded
+    return current_state, nodes_expanded
+
+
+algorithms = {
+    'BFS': bfs
+}

@@ -1,4 +1,4 @@
-from mmn11.consts import PUZZLE_SIZE, EMPTY_TILE, DIRECTIONS
+from consts import PUZZLE_SIZE, EMPTY_TILE, DIRECTIONS
 
 
 class PuzzleState:
@@ -17,7 +17,7 @@ class PuzzleState:
         self.cost = cost
 
     def __eq__(self, other):
-        return self.board == other.board
+        return hash(self) == hash(other)
 
     def __hash__(self):
         return hash(tuple(self.board))
@@ -25,10 +25,7 @@ class PuzzleState:
     def get_successors(self):
         successors = []
         empty_index = self.board.index(EMPTY_TILE)
-        moves = []
-
         row, col = self._get_empty_coords()
-
 
         for move in DIRECTIONS.values():
             new_row, new_col = row + move[0], col + move[1]  # "Move" the empty tile
@@ -55,3 +52,12 @@ class PuzzleState:
         print(f" {self.board[3]} | {self.board[4]} | {self.board[5]}")
         print("---+---+---")
         print(f" {self.board[6]} | {self.board[7]} | {self.board[8]}")
+
+    @staticmethod
+    def extract_path(state):
+        path = []
+        while state.parent is not None:
+            path.append(state.action)
+            state = state.parent
+        path.reverse()
+        return path
