@@ -30,7 +30,7 @@ def dls(state: PuzzleState, limit: int):
         if current_state.board == GOAL_STATE:
             return current_state, len(explored)
         explored.add(current_state)
-        if len(frontier) > limit:
+        if current_state.depth >= limit:
             return None, len(explored)
         for child in current_state.get_successors():
             if child not in explored and child not in frontier:
