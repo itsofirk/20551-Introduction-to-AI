@@ -1,4 +1,5 @@
 from collections import deque
+import heapq
 
 from consts import GOAL_STATE
 from puzzle_state import PuzzleState
@@ -45,7 +46,52 @@ def iddfs(start_state: PuzzleState):
             return result, total_nodes_expanded
         depth += 1
 
+
+def gbfs(start_state: PuzzleState):
+    frontier = []
+    heapq.heappush(frontier, (start_state.heuristic(), start_state))
+    explored = set()
+    nodes_expanded = 0
+
+    while frontier:
+        _, current_state = heapq.heappop(frontier)
+        if current_state.board == GOAL_STATE:
+            return current_state, nodes_expanded
+        explored.add(current_state)
+        nodes_expanded += 1
+        for child in current_state.get_successors():
+            if child not in explored:
+                h = child.heuristic()
+                heapq.heappush(frontier, (h, child))
+    return None, nodes_expanded
+
+def a_star(start_state: PuzzleState):
+    frontier = []
+    start_state.cost = 0
+    heapq.heappush(frontier, (start_state.heuristic(), start_state))
+    explored = {}
+    nodes_expanded = 0
+
+    while frontier:
+        _, current_state = heapq.heappop(frontier)
+        if current_state.board == GOAL_STATE:
+            return current_state, nodes_expanded
+        explored[current_state] = current_state.cost
+        nodes_expanded += 1
+        for child in current_state.get_successors():
+            child.cost = current_state.cost + 1
+            if child not in explored or child.cost < explored.get(child, float('inf')):
+                explored[child] = child.cost
+                f = child.cost + child.heuristic()
+                heapq.heappush(frontier, (f, child))
+    return None, nodes_expanded
+
+
+
+
 algorithms = {
     'BFS': bfs,
-    'IDDFS': iddfs
+    'IDDFS': iddfs,
+    'GBFS': gbfs,
+    'A*': a_star
 }

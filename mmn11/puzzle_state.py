@@ -1,4 +1,4 @@
-from consts import PUZZLE_SIZE, EMPTY_TILE, DIRECTIONS
+from consts import EMPTY_TILE, GOAL_STATE, DIRECTIONS, get_empty_index, get_coords
 
 
 class PuzzleState:
@@ -21,6 +21,19 @@ class PuzzleState:
 
     def __hash__(self):
         return hash(tuple(self.board))
+
+    def __lt__(self, other):
+        return (self.cost + self.heuristic()) < (other.cost + other.heuristic())
+
+    def heuristic(self):
+        distance = 0
+        for index, tile in enumerate(self.board):
+            if tile != EMPTY_TILE:
+                goal_index = GOAL_STATE.index(tile)
+                current_row, current_col = get_coords(index)
+                goal_row, goal_col = get_coords(goal_index)
+                distance += abs(current_row - goal_row) + abs(current_col - goal_col)
+        return distance
 
     def get_successors(self):
         successors = []
