@@ -25,20 +25,21 @@ def bfs(start_state: PuzzleState):
 def dls(state: PuzzleState, limit: int):
     frontier = [state]
     explored = set()
+    nodes_expanded = 0
     while frontier:
         current_state = frontier.pop()
         if current_state.board == GOAL_STATE:
-            return current_state, len(explored)
+            return current_state, nodes_expanded
         explored.add(current_state)
-        if current_state.depth >= limit:
-            return None, len(explored)
-        for child in current_state.get_successors():
-            if child not in explored and child not in frontier:
-                frontier.append(child)
-    return None, len(explored)
+        if current_state.depth < limit:
+            nodes_expanded += 1
+            for child in current_state.get_successors():
+                if child not in explored and child not in frontier:
+                    frontier.append(child)
+    return None, nodes_expanded
 
 def iddfs(start_state: PuzzleState):
-    depth = 0
+    depth = 1
     nodes_expanded = 0
     while True:
         result, explored = dls(start_state, depth)
