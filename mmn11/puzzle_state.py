@@ -25,7 +25,7 @@ class PuzzleState:
     def __lt__(self, other):
         return (self.cost + self.heuristic()) < (other.cost + other.heuristic())
 
-    def heuristic(self):
+    def book_heuristic(self):
         distance = 0
         for index, tile in enumerate(self.board):
             if tile != EMPTY_TILE:
@@ -34,6 +34,20 @@ class PuzzleState:
                 goal_row, goal_col = get_coords(goal_index)
                 distance += abs(current_row - goal_row) + abs(current_col - goal_col)
         return distance
+
+    def heuristic(self):
+        out_of_row = 0
+        out_of_col = 0
+        for index, tile in enumerate(self.board):
+            if tile != EMPTY_TILE:
+                goal_index = GOAL_STATE.index(tile)
+                current_row, current_col = get_coords(index)
+                goal_row, goal_col = get_coords(goal_index)
+                if current_row != goal_row:
+                    out_of_row += 1
+                if current_col != goal_col:
+                    out_of_col += 1
+        return out_of_row + out_of_col
 
     def get_successors(self):
         successors = []
