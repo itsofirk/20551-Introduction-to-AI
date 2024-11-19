@@ -4,10 +4,14 @@ description: 8-Tiles Puzzle solver using 4 different algorithms
 """
 import argparse
 from algorithms import algorithms
+from consts import is_solvable
 from puzzle_state import PuzzleState
 
 
 def main(board):
+    if not is_solvable(board):
+        print("Board is not solvable.")
+        return
     start_state = PuzzleState(board)
 
     print("Initial board:")

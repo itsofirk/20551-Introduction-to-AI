@@ -24,8 +24,8 @@ class PuzzleState:
 
     def get_successors(self):
         successors = []
-        empty_index = self.board.index(EMPTY_TILE)
-        row, col = self._get_empty_coords()
+        empty_index = get_empty_index(self.board)
+        row, col = get_coords(empty_index)
 
         for move in DIRECTIONS.values():
             new_row, new_col = row + move[0], col + move[1]  # "Move" the empty tile
@@ -36,12 +36,6 @@ class PuzzleState:
                 action = new_board[empty_index]  # The tile that moved into the blank space
                 successors.append(PuzzleState(new_board, self, action, self.depth + 1))
         return successors
-
-    def _get_empty_index(self):
-        return self.board.index(EMPTY_TILE)
-
-    def _get_empty_coords(self):
-        return divmod(self._get_empty_index(), PUZZLE_SIZE)
 
     def print_board(self):
         """
