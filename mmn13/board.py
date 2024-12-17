@@ -18,7 +18,7 @@ class Board:
         for row in self.grid:
             print(''.join(row))
 
-    def _in_bounds(self, row, col):
+    def _is_in_bounds(self, row, col):
         return 0 <= row < self.size and 0 <= col < self.size
 
     def get_opponent(self, player):
@@ -33,11 +33,11 @@ class Board:
                     continue
                 for dr, dc in DIRECTIONS:
                     nr, nc = r + dr, c + dc
-                    if self._in_bounds(nr, nc) and self.grid[nr][nc] == opponent:
-                        while self._in_bounds(nr, nc) and self.grid[nr][nc] == opponent:
+                    if self._is_in_bounds(nr, nc) and self.grid[nr][nc] == opponent:
+                        while self._is_in_bounds(nr, nc) and self.grid[nr][nc] == opponent:
                             nr += dr
                             nc += dc
-                        if self._in_bounds(nr, nc) and self.grid[nr][nc] == EMPTY:
+                        if self._is_in_bounds(nr, nc) and self.grid[nr][nc] == EMPTY:
                             legal_moves.add((nr, nc))
         return list(legal_moves)
 
@@ -56,11 +56,11 @@ class Board:
         for dr, dc in DIRECTIONS:
             r, c = move[0] + dr, move[1] + dc
             temp_flips = []
-            while self._in_bounds(r, c) and self.grid[r][c] == opponent:
+            while self._is_in_bounds(r, c) and self.grid[r][c] == opponent:
                 temp_flips.append((r, c))
                 r += dr
                 c += dc
-            if self._in_bounds(r, c) and self.grid[r][c] == player:
+            if self._is_in_bounds(r, c) and self.grid[r][c] == player:
                 flips.extend(temp_flips)
         return flips
 
