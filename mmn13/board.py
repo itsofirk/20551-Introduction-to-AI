@@ -1,4 +1,4 @@
-from helpers import PLAYER_1, PLAYER_2, EMPTY, DIRECTIONS
+from helpers import PLAYER_1, PLAYER_2, EMPTY, DIRECTIONS, get_opponent, underline
 
 
 class Board:
@@ -22,12 +22,9 @@ class Board:
     def _is_in_bounds(self, row, col):
         return 0 <= row < self.size and 0 <= col < self.size
 
-    def get_opponent(self, player):
-        return PLAYER_2 if player == PLAYER_1 else PLAYER_1
-
     def get_legal_moves(self, player):
         legal_moves = set()
-        opponent = self.get_opponent(player)
+        opponent = get_opponent(player)
         for r in range(self.size):
             for c in range(self.size):
                 if self.grid[r][c] != player:
@@ -53,7 +50,7 @@ class Board:
 
     def get_flips(self, player, move: tuple[int, int]):
         flips = []
-        opponent = self.get_opponent(player)
+        opponent = get_opponent(player)
         for dr, dc in DIRECTIONS:
             r, c = move[0] + dr, move[1] + dc
             temp_flips = []
@@ -83,7 +80,3 @@ class Board:
                 elif cell == PLAYER_2:
                     score2 += 1
         return score1, score2
-
-
-def underline(s):
-    return ''.join(f'\u0332{x}' for x in s+' ')

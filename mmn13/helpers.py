@@ -14,3 +14,12 @@ class GameMode(Enum):
     METHODICAL = 2
     RANDOM = 3
     INTERACTIVE = 4
+
+
+def get_opponent(player):
+    return PLAYER_2 if player == PLAYER_1 else PLAYER_1
+
+
+def underline(s):
+    return ''.join(f'\u0332{x}' for x in s+' ')
+
