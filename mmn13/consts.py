@@ -1,5 +1,5 @@
-PLAYER_1 = 'x'
-PLAYER_2 = 'o'
+PLAYER_1 = 'X'
+PLAYER_2 = 'O'
 EMPTY = '-'
 
 # Directions for move checking: Up, Up-Right, Right, Down-Right, Down, Down-Left, Left, Up-Left
