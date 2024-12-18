@@ -3,6 +3,7 @@ from typing import Type
 from helpers import PLAYER_1, PLAYER_2, GameMode
 from board import Board
 from movers import InteractiveMover, RandomMover, BaseMover
+from movers.methodical_mover import MethodicalMover
 
 
 class Game:
@@ -18,16 +19,16 @@ class Game:
     def switch_player(self):
         self.current_player = self.current_player % 2 + 1
 
-    def start(self, mode, parameter):
+    def start(self, mode, moves_to_play):
         if mode == GameMode.INTERACTIVE:
             self.play(InteractiveMover)
         elif mode == GameMode.DISPLAY_ALL_ACTIONS:
-            # self.play_display_all_actions(parameter)
+            # self.play_display_all_actions(moves_to_play)
             ...
         elif mode == GameMode.METHODICAL:
-            self.play(..., parameter)
+            self.play(MethodicalMover, moves_to_play)
         elif mode == GameMode.RANDOM:
-            self.play(RandomMover, parameter)
+            self.play(RandomMover, moves_to_play)
         self.display_final_result()
 
     def play(self, Mover: Type[BaseMover], moves_to_play=None):
