@@ -1,4 +1,4 @@
-from consts import PLAYER_1, PLAYER_2
+from consts import PLAYER_1, PLAYER_2, GameMode
 from board import Board
 from player import Player
 
@@ -17,16 +17,27 @@ class Game:
         self.current_player = self.current_player % 2 + 1
 
     def play(self):
+    def start(self, mode, parameter):
+        if mode == GameMode.INTERACTIVE:
+            self.play(Player.get_move)
+        elif mode == GameMode.DISPLAY_ALL_ACTIONS:
+            self.play_display_all_actions(parameter)
+        elif mode == GameMode.METHODICAL:
+            self.play_methodical(parameter)
+        elif mode == GameMode.RANDOM:
+            self.play(parameter)
+        self.display_final_result()
+
+    def play(self, get_move):
         self.display()
         while not self.is_game_over():
             self.state_count += 1
             player = self.players[self.current_player]
             legal_moves = self.board.get_legal_moves(player)
             if legal_moves:
-                move = player.get_move(legal_moves)
-                if move:
-                    self.board.make_move(player, move)
-                    self.display(self.current_player, move, with_score=True)
+                move = get_move(player.color, legal_moves)
+                self.board.make_move(player, move)
+                self.display(self.current_player, move, with_score=True)
             else:
                 print(f"Player {self.current_player} has no legal moves. Skipping turn.\n")
             self.switch_player()
@@ -34,7 +45,7 @@ class Game:
         self.display_final_result()
 
     def is_game_over(self):
-        return self.board.is_full() or not any((self.board.has_any_moves(player) for player in self.players.values()))
+        return self.board.is_full() or not any((self.board.has_any_moves(p) for p in self.players.values()))
 
     def display(self, player_num=None, move=None, with_score=False):
         print()

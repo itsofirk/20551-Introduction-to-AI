@@ -7,6 +7,9 @@ def main():
     args = parse_args()
     game = Game()
 
+    mode = GameMode.INTERACTIVE
+    parameter = None
+
     if args.displayAllActions is not None:
         mode = GameMode.DISPLAY_ALL_ACTIONS
         parameter = args.displayAllActions
@@ -16,11 +19,8 @@ def main():
     elif args.random is not None:
         mode = GameMode.RANDOM
         parameter = args.random
-    elif args.interactive:
-        mode = GameMode.INTERACTIVE
-        parameter = None
 
-    game.play(mode, parameter)
+    game.start(mode, parameter)
 
 
 def parse_args():
@@ -30,7 +30,6 @@ def parse_args():
                        help="Display all possible actions after reaching a given total number of disks")
     group.add_argument("--methodical", type=int, help="Play a given number of moves methodically")
     group.add_argument("--random", type=int, help="Play a given number of moves randomly")
-    group.add_argument("--interactive", action="store_true", help="Play interactively")
     args = parser.parse_args()
     return args
 

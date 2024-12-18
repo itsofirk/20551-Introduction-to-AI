@@ -2,12 +2,13 @@ class Player:
     def __init__(self, player_color):
         self.color = player_color
 
-    def get_move(self, legal_moves: list[tuple[int, int]]):
+    @staticmethod
+    def get_move(color, legal_moves: list[tuple[int, int]]):
         if not legal_moves:
             return None
         while True:
             try:
-                move = input(f"Player {self.color}, enter your move as 'row,col': ")
+                move = input(f"Player {color}, enter your move as 'row,col': ")
                 row, col = move.strip().split(',')
                 row, col = int(row), int(col)
                 if (row, col) in legal_moves:
