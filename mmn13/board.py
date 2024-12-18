@@ -1,4 +1,4 @@
-from consts import PLAYER_1, PLAYER_2, EMPTY, DIRECTIONS
+from helpers import PLAYER_1, PLAYER_2, EMPTY, DIRECTIONS
 
 
 class Board:

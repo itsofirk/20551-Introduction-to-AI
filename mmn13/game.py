@@ -1,4 +1,4 @@
-from consts import PLAYER_1, PLAYER_2, GameMode
+from helpers import PLAYER_1, PLAYER_2, GameMode
 from board import Board
 from movers import InteractiveMover, RandomMover, BaseMover
 

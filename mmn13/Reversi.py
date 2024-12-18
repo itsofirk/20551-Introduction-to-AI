@@ -1,6 +1,6 @@
 import argparse
 
-from consts import GameMode
+from helpers import GameMode
 from game import Game
 
 def main():
