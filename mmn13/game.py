@@ -1,3 +1,5 @@
+from typing import Type
+
 from helpers import PLAYER_1, PLAYER_2, GameMode
 from board import Board
 from movers import InteractiveMover, RandomMover, BaseMover
@@ -18,19 +20,19 @@ class Game:
 
     def start(self, mode, parameter):
         if mode == GameMode.INTERACTIVE:
-            self.play(InteractiveMover.get_move)
+            self.play(InteractiveMover, self.board.size**2)
         elif mode == GameMode.DISPLAY_ALL_ACTIONS:
             # self.play_display_all_actions(parameter)
             ...
         elif mode == GameMode.METHODICAL:
             self.play(..., parameter)
         elif mode == GameMode.RANDOM:
-            self.play(RandomMover.get_move, parameter)
+            self.play(RandomMover, parameter)
         self.display_final_result()
 
-    def play(self, Mover: BaseMover, param=-1):
+    def play(self, Mover: Type[BaseMover], param):
         self.display()
-        while not self.is_game_over():
+        while not self.is_game_over() and self.state_count < param:
             self.state_count += 1
             player = self.players[self.current_player]
             legal_moves = self.board.get_legal_moves(player)
@@ -42,7 +44,6 @@ class Game:
                 print(f"Player {self.current_player} has no legal moves. Skipping turn.\n")
             self.switch_player()
         self.display()
-        self.display_final_result()
 
     def is_game_over(self):
         return self.board.is_full() or not any((self.board.has_any_moves(p) for p in self.players.values()))
