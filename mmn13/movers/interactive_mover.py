@@ -1,7 +1,7 @@
-class Player:
-    def __init__(self, player_color):
-        self.color = player_color
+from movers.base_mover import BaseMover
 
+
+class InteractiveMover(BaseMover):
     @staticmethod
     def get_move(color, legal_moves: list[tuple[int, int]]):
         if not legal_moves:

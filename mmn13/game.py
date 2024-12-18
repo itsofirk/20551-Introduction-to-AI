@@ -1,14 +1,14 @@
 from consts import PLAYER_1, PLAYER_2, GameMode
 from board import Board
-from player import Player
+from movers import InteractiveMover, RandomMover, BaseMover
 
 
 class Game:
     def __init__(self):
         self.board = Board()
         self.players = {
-            1: Player(PLAYER_1),
-            2: Player(PLAYER_2)
+            1: PLAYER_1,
+            2: PLAYER_2
         }
         self.current_player = 1
         self.state_count = 0
@@ -16,26 +16,26 @@ class Game:
     def switch_player(self):
         self.current_player = self.current_player % 2 + 1
 
-    def play(self):
     def start(self, mode, parameter):
         if mode == GameMode.INTERACTIVE:
-            self.play(Player.get_move)
+            self.play(InteractiveMover.get_move)
         elif mode == GameMode.DISPLAY_ALL_ACTIONS:
-            self.play_display_all_actions(parameter)
+            # self.play_display_all_actions(parameter)
+            ...
         elif mode == GameMode.METHODICAL:
-            self.play_methodical(parameter)
+            self.play(..., parameter)
         elif mode == GameMode.RANDOM:
-            self.play(parameter)
+            self.play(RandomMover.get_move, parameter)
         self.display_final_result()
 
-    def play(self, get_move):
+    def play(self, Mover: BaseMover, param=-1):
         self.display()
         while not self.is_game_over():
             self.state_count += 1
             player = self.players[self.current_player]
             legal_moves = self.board.get_legal_moves(player)
             if legal_moves:
-                move = get_move(player.color, legal_moves)
+                move = Mover.get_move(player, legal_moves)
                 self.board.make_move(player, move)
                 self.display(self.current_player, move, with_score=True)
             else:

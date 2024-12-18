@@ -1,5 +1,4 @@
 from consts import PLAYER_1, PLAYER_2, EMPTY, DIRECTIONS
-from player import Player
 
 
 class Board:
@@ -23,15 +22,15 @@ class Board:
     def _is_in_bounds(self, row, col):
         return 0 <= row < self.size and 0 <= col < self.size
 
-    def get_opponent(self, player: Player):
-        return PLAYER_2 if player.color == PLAYER_1 else PLAYER_1
+    def get_opponent(self, player):
+        return PLAYER_2 if player == PLAYER_1 else PLAYER_1
 
-    def get_legal_moves(self, player: Player):
+    def get_legal_moves(self, player):
         legal_moves = set()
         opponent = self.get_opponent(player)
         for r in range(self.size):
             for c in range(self.size):
-                if self.grid[r][c] != player.color:
+                if self.grid[r][c] != player:
                     continue
                 for dr, dc in DIRECTIONS:
                     nr, nc = r + dr, c + dc
@@ -43,16 +42,16 @@ class Board:
                             legal_moves.add((nr, nc))
         return list(legal_moves)
 
-    def make_move(self, player: Player, move: tuple[int, int]):
+    def make_move(self, player, move: tuple[int, int]):
         flips = self.get_flips(player, move)
         if not flips:
             return False  # Illegal move
-        self.grid[move[0]][move[1]] = player.color
+        self.grid[move[0]][move[1]] = player
         for r, c in flips:
-            self.grid[r][c] = player.color
+            self.grid[r][c] = player
         return True
 
-    def get_flips(self, player: Player, move: tuple[int, int]):
+    def get_flips(self, player, move: tuple[int, int]):
         flips = []
         opponent = self.get_opponent(player)
         for dr, dc in DIRECTIONS:
@@ -62,11 +61,11 @@ class Board:
                 temp_flips.append((r, c))
                 r += dr
                 c += dc
-            if self._is_in_bounds(r, c) and self.grid[r][c] == player.color:
+            if self._is_in_bounds(r, c) and self.grid[r][c] == player:
                 flips.extend(temp_flips)
         return flips
 
-    def has_any_moves(self, player: Player):
+    def has_any_moves(self, player):
         return len(self.get_legal_moves(player)) > 0
 
     def is_full(self):
