@@ -20,7 +20,7 @@ class Game:
 
     def start(self, mode, parameter):
         if mode == GameMode.INTERACTIVE:
-            self.play(InteractiveMover, self.board.size**2)
+            self.play(InteractiveMover)
         elif mode == GameMode.DISPLAY_ALL_ACTIONS:
             # self.play_display_all_actions(parameter)
             ...
@@ -30,15 +30,18 @@ class Game:
             self.play(RandomMover, parameter)
         self.display_final_result()
 
-    def play(self, Mover: Type[BaseMover], param):
+    def play(self, Mover: Type[BaseMover], moves_to_play=None):
+        if moves_to_play is None:
+            moves_to_play = self.board.size ** 2
         self.display()
-        while not self.is_game_over() and self.state_count < param:
-            self.state_count += 1
+        for _ in range(moves_to_play):
+            if self.is_game_over():
+                break
             player = self.players[self.current_player]
             legal_moves = self.board.get_legal_moves(player)
             if legal_moves:
                 move = Mover.get_move(player, legal_moves)
-                self.board.make_move(player, move)
+                self.make_move(player, move)
                 self.display(self.current_player, move, with_score=True)
             else:
                 print(f"Player {self.current_player} has no legal moves. Skipping turn.\n")
@@ -47,6 +50,10 @@ class Game:
 
     def is_game_over(self):
         return self.board.is_full() or not any((self.board.has_any_moves(p) for p in self.players.values()))
+
+    def make_move(self, player, move: tuple[int, int]):
+        self.state_count += 1
+        self.board.make_move(player, move)
 
     def display(self, player_num=None, move=None, with_score=False):
         print()
