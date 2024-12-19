@@ -56,9 +56,8 @@ class Game:
 
     def make_move(self, Mover: Type[BaseMover]):
         player = self.players[self.current_player]
-        legal_moves = self.board.get_legal_moves(player)
-        if legal_moves:
-            move = Mover.get_move(player, legal_moves)
+        move = Mover.get_move(player, self.board)
+        if move:
             self.state_count += 1
             self.board.make_move(player, move)
             self.display(self.current_player, move, with_score=True)

@@ -1,4 +1,7 @@
+from board import Board
+
+
 class BaseMover:
     @staticmethod
-    def get_move(color: str, legal_moves: list[tuple[int, int]]):
+    def get_move(color: str, board: Board):
         raise NotImplementedError
