@@ -6,8 +6,8 @@ from movers.base_mover import BaseMover
 
 
 class HeuristicMover(BaseMover):
-    @staticmethod
-    def get_move(color: str, board: Board):
+    @classmethod
+    def get_move(cls, color: str, board: Board):
         legal_moves = board.get_legal_moves(color)
         if not legal_moves:
             return None
@@ -17,7 +17,7 @@ class HeuristicMover(BaseMover):
         for move in legal_moves:
             temp_board = deepcopy(board)
             temp_board.make_move(color, move)
-            val = HeuristicMover.heuristic(color, temp_board)
+            val = cls.heuristic(color, temp_board)
             if val > best_value:
                 best_value = val
                 best_move = move
