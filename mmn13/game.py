@@ -1,9 +1,9 @@
 from typing import Type
+from copy import deepcopy
 
 from helpers import PLAYER_1, PLAYER_2, GameMode
 from board import Board
-from movers import InteractiveMover, RandomMover, BaseMover
-from movers.methodical_mover import MethodicalMover
+from movers import InteractiveMover, MethodicalMover, RandomMover, BaseMover, single_moves_factory
 
 
 class Game:
@@ -24,11 +24,13 @@ class Game:
             self.play(InteractiveMover)
         elif mode == GameMode.DISPLAY_ALL_ACTIONS:
             self.play_until_disk_count_reached(param)
+            print("Reached target disk count.")
+            print("Displaying all actions...")
+            self.display_all_actions()
         elif mode == GameMode.METHODICAL:
             self.play(MethodicalMover, param)
         elif mode == GameMode.RANDOM:
             self.play(RandomMover, param)
-        self.display_final_result()
 
     def play(self, Mover: Type[BaseMover], moves_to_play=None):
         if moves_to_play is None:
@@ -39,6 +41,7 @@ class Game:
                 break
             self.make_move(Mover)
         self.display()
+        self.display_final_result()
 
     def play_until_disk_count_reached(self, target_disks):
         while not self.is_game_over():
@@ -75,6 +78,25 @@ class Game:
         if with_score:
             score1, score2 = self.board.get_score()
             print(f'Result - Player 1: {score1} disks, Player 2: {score2} disks, Total: {score1 + score2} disks')
+
+    def display_all_actions(self):
+        current_player = self.players[self.current_player]
+        legal_moves = self.board.get_legal_moves(current_player)
+
+        backup_board = deepcopy(self.board)
+        backup_state_count = self.state_count
+        backup_current_player = self.current_player
+
+        for move, SingleMoveMover in single_moves_factory(legal_moves):
+            self.board = deepcopy(backup_board)
+            self.state_count = backup_state_count
+
+            print()
+            print(f"State {self.state_count}")
+            self.board.display()
+            self.make_move(SingleMoveMover)
+            self.display(backup_current_player, move, with_score=True)
+
 
     def display_final_result(self):
         score1, score2 = self.board.get_score()
