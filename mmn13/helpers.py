@@ -14,8 +14,7 @@ class GameMode(Enum):
     METHODICAL = 2
     RANDOM = 3
     INTERACTIVE = 4
-    H1 = 5
-    H2 = 6
+    CUSTOM = 5
 
 
 def get_opponent(player):

@@ -20,25 +20,29 @@ class Game:
         self.current_player = self.current_player % 2 + 1
 
     def start(self, mode, param):
-        if mode == GameMode.INTERACTIVE:
-            self.play(InteractiveMover)
-        elif mode == GameMode.DISPLAY_ALL_ACTIONS:
-            self.play_until_disk_count_reached(param)
-            print("Reached target disk count.")
-            print("Displaying all actions...")
-            self.display_all_actions()
-        elif mode == GameMode.METHODICAL:
-            self.play(MethodicalMover, param)
-        elif mode == GameMode.RANDOM:
-            self.play(RandomMover, param)
+        match mode:
+            case GameMode.INTERACTIVE:
+                self.play(InteractiveMover, InteractiveMover)
+            case GameMode.DISPLAY_ALL_ACTIONS:
+                self.play_until_disk_count_reached(param)
+                print("Reached target disk count.\nDisplaying all actions...")
+                self.display_all_actions()
+            case GameMode.METHODICAL:
+                self.play(MethodicalMover, MethodicalMover, param)
+            case GameMode.RANDOM:
+                self.play(RandomMover, RandomMover, param)
+            case GameMode.CUSTOM:
+                Mover1, Mover2 = param
+                self.play(Mover1, Mover2)
 
-    def play(self, Mover: Type[BaseMover], moves_to_play=None):
+    def play(self, Mover1: Type[BaseMover], Mover2: Type[BaseMover], moves_to_play=None):
         if moves_to_play is None:
             moves_to_play = self.board.size ** 2
         self.display()
         for _ in range(moves_to_play):
             if self.is_game_over():
                 break
+            Mover = Mover1 if self.current_player == 1 else Mover2
             self.make_move(Mover)
         self.display()
         self.display_final_result()
