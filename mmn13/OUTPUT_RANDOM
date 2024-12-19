@@ -1,0 +1,86 @@
+
+State 0
+̲ ̲|̲ ̲0̲ ̲1̲ ̲2̲ ̲3̲ ̲4̲ ̲5̲ ̲6̲ ̲7̲
+0| - - - - - - - -
+1| - - - - - - - -
+2| - - - - - - - -
+3| - - - X O - - -
+4| - - - O X - - -
+5| - - - - - - - -
+6| - - - - - - - -
+7| - - - - - - - -
+
+State 1, Player 1 moved, Action (3, 5)
+̲ ̲|̲ ̲0̲ ̲1̲ ̲2̲ ̲3̲ ̲4̲ ̲5̲ ̲6̲ ̲7̲
+0| - - - - - - - -
+1| - - - - - - - -
+2| - - - - - - - -
+3| - - - X X X - -
+4| - - - O X - - -
+5| - - - - - - - -
+6| - - - - - - - -
+7| - - - - - - - -
+Result - Player 1: 4 disks, Player 2: 1 disks, Total: 5 disks
+
+State 2, Player 2 moved, Action (2, 5)
+̲ ̲|̲ ̲0̲ ̲1̲ ̲2̲ ̲3̲ ̲4̲ ̲5̲ ̲6̲ ̲7̲
+0| - - - - - - - -
+1| - - - - - - - -
+2| - - - - - O - -
+3| - - - X O X - -
+4| - - - O X - - -
+5| - - - - - - - -
+6| - - - - - - - -
+7| - - - - - - - -
+Result - Player 1: 3 disks, Player 2: 3 disks, Total: 6 disks
+
+State 3, Player 1 moved, Action (4, 2)
+̲ ̲|̲ ̲0̲ ̲1̲ ̲2̲ ̲3̲ ̲4̲ ̲5̲ ̲6̲ ̲7̲
+0| - - - - - - - -
+1| - - - - - - - -
+2| - - - - - O - -
+3| - - - X O X - -
+4| - - X X X - - -
+5| - - - - - - - -
+6| - - - - - - - -
+7| - - - - - - - -
+Result - Player 1: 5 disks, Player 2: 2 disks, Total: 7 disks
+
+State 4, Player 2 moved, Action (3, 2)
+̲ ̲|̲ ̲0̲ ̲1̲ ̲2̲ ̲3̲ ̲4̲ ̲5̲ ̲6̲ ̲7̲
+0| - - - - - - - -
+1| - - - - - - - -
+2| - - - - - O - -
+3| - - O O O X - -
+4| - - X X X - - -
+5| - - - - - - - -
+6| - - - - - - - -
+7| - - - - - - - -
+Result - Player 1: 4 disks, Player 2: 4 disks, Total: 8 disks
+
+State 5, Player 1 moved, Action (2, 2)
+̲ ̲|̲ ̲0̲ ̲1̲ ̲2̲ ̲3̲ ̲4̲ ̲5̲ ̲6̲ ̲7̲
+0| - - - - - - - -
+1| - - - - - - - -
+2| - - X - - O - -
+3| - - X X O X - -
+4| - - X X X - - -
+5| - - - - - - - -
+6| - - - - - - - -
+7| - - - - - - - -
+Result - Player 1: 7 disks, Player 2: 2 disks, Total: 9 disks
+
+State 5
+̲ ̲|̲ ̲0̲ ̲1̲ ̲2̲ ̲3̲ ̲4̲ ̲5̲ ̲6̲ ̲7̲
+0| - - - - - - - -
+1| - - - - - - - -
+2| - - X - - O - -
+3| - - X X O X - -
+4| - - X X X - - -
+5| - - - - - - - -
+6| - - - - - - - -
+7| - - - - - - - -
+Final Score:
+Player 1: 7 disks
+Player 2: 2 disks
+Player 1 wins!
