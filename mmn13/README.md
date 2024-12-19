@@ -117,3 +117,97 @@ The code introduces a `BaseMover` interface so that various move-selection strat
 3. `MethodicalMover`: Uses a simple numeric rule `(row % (col+1))` to deterministically choose moves.
 
 This modular design allows testing different approaches by simply changing the mover class.
+
+
+## 2. Heuristic Functions
+
+At this stage, we introduce two different heuristic evaluation functions, `H1` and `H2`.
+Both functions take a board state and return a numeric value estimating its quality for a specific player. 
+These heuristics are used to guide move selection one step ahead, meaning that each player will choose actions that appear best according to the chosen heuristic.
+
+### H1 – Disk Count Difference  
+H1 calculates the difference between the number of the current player's disks and the opponent's disks:  
+`H1(state, color) = (Number of Current Player Disks) - (Number of Opponent Disks)`  
+_Motivation_: A higher positive value implies that the current player is leading in disk count, thus is presumably in a better position.
+
+### H2 – Weighted Board Control  
+H2 sort of expands H1, it considers the disk count as well as assigns higher importance to certain strategic positions on the board.
+For example, corner cells are typically more valuable, as they cannot be flipped once placed. Edges might be slightly more valuable than central squares.  
+
+ - The weighting scheme:
+   - Corners: +3 points per owned corner
+   - Edges (non-corner): +1 point per owned edge disk
+   - Other positions: 0 points beyond their normal count (already reflected by disk count)
+
+```
+H2(state, color) = (Number of Current Player Disks - Number of Opponent Disks) + \
+                    3*(Current Player Corners - Opponent Corners) + \
+                    (Current Player Edges - Opponent Edges)
+```
+
+_Motivation_: This heuristic values both advantage by quantity and quality of positioning.
+
+### Example States and Heuristic Computation
+
+#### State A (6 disks)
+```
+̲ ̲|̲ ̲0̲ ̲1̲ ̲2̲ ̲3̲ ̲4̲ ̲5̲ ̲6̲ ̲7̲
+0| - - - - - - - - 
+1| - - - - - - - - 
+2| - - - - X O - - 
+3| - - - X O - - - 
+4| - - - O X - - - 
+5| - - - - - - - - 
+6| - - - - - - - - 
+7| - - - - - - - -
+```
+
+- Current player: Player 1
+- Count: Player 1 = 4, Player 2 = 2
+ 
+1. `H1 = (Player 1 count) - (Player 2 count) = 4 - 2 = 2`
+2. Corners: None owned by Player 1 or Player 2.  
+   Edges: no edge advantage here since all disks are central.
+   `H2 = (4 - 2) + 3*(0 - 0) + (0 - 0) = 2`
+
+### State B (24 disks)
+```
+̲ ̲|̲ ̲0̲ ̲1̲ ̲2̲ ̲3̲ ̲4̲ ̲5̲ ̲6̲ ̲7̲
+0| O O X X - - - - 
+1| O X X X O - - - 
+2| O X O X X - - - 
+3| X X O O X - - - 
+4| X O X O X - - - 
+5| - - - - - - - - 
+6| - - - - - - - - 
+7| - - - - - - - -
+```
+- Current player: Player 1
+- Count Player 1 = 14, Player 2 = 10
+
+1. `H1 = (Player 1 count) - (Player 2 count) = 10 - 9 = 1`
+2. Corners: Player 2 owns 1 corner.  
+   Edges: Player 1 owns 4, Player 2 owns 3.
+   `H2 = (14 - 10) + 3*(0 - 1) + (4 - 3) = 4 - 3 + 1 = 2`    
+   H2 penalizes Player 1 here because Player 2 owns a corner and also has more edge control.
+
+### State C (33 disks)
+```
+̲ ̲|̲ ̲0̲ ̲1̲ ̲2̲ ̲3̲ ̲4̲ ̲5̲ ̲6̲ ̲7̲ 
+0| - X X X X X X X
+1| O X O - O O - -
+2| - X - O O O - -
+3| O X O O O - - -
+4| - X - O O - - -
+5| X X O O O - - -
+6| - - O - O O - -
+7| - - - - - - O -
+```
+
+- Current player: Player 2
+- Count Player 1 = 13 disks, Player 2 = 20 disks
+
+1. `H1 = (Player 2 count) - (Player 1 count) = 20 - 13 = 7`
+2. Corners: Player 1 owns 1 corner.  
+   Edges: Player 1 owns 7, Player 2 owns 2.
+   `H2 = (20 - 13) + 3*(0 - 1) + (2 - 7) = 7 - 3 - 5 = -1`
