@@ -19,16 +19,15 @@ class Game:
     def switch_player(self):
         self.current_player = self.current_player % 2 + 1
 
-    def start(self, mode, moves_to_play):
+    def start(self, mode, param):
         if mode == GameMode.INTERACTIVE:
             self.play(InteractiveMover)
         elif mode == GameMode.DISPLAY_ALL_ACTIONS:
-            # self.play_display_all_actions(moves_to_play)
-            ...
+            self.play_until_disk_count_reached(param)
         elif mode == GameMode.METHODICAL:
-            self.play(MethodicalMover, moves_to_play)
+            self.play(MethodicalMover, param)
         elif mode == GameMode.RANDOM:
-            self.play(RandomMover, moves_to_play)
+            self.play(RandomMover, param)
         self.display_final_result()
 
     def play(self, Mover: Type[BaseMover], moves_to_play=None):
@@ -38,23 +37,31 @@ class Game:
         for _ in range(moves_to_play):
             if self.is_game_over():
                 break
-            player = self.players[self.current_player]
-            legal_moves = self.board.get_legal_moves(player)
-            if legal_moves:
-                move = Mover.get_move(player, legal_moves)
-                self.make_move(player, move)
-                self.display(self.current_player, move, with_score=True)
-            else:
-                print(f"Player {self.current_player} has no legal moves. Skipping turn.\n")
-            self.switch_player()
+            self.make_move(Mover)
         self.display()
+
+    def play_until_disk_count_reached(self, target_disks):
+        while not self.is_game_over():
+            score1, score2 = self.board.get_score()
+            total = score1 + score2
+            if total >= target_disks:
+                break
+            self.make_move(RandomMover)
 
     def is_game_over(self):
         return self.board.is_full() or not any((self.board.has_any_moves(p) for p in self.players.values()))
 
-    def make_move(self, player, move: tuple[int, int]):
-        self.state_count += 1
-        self.board.make_move(player, move)
+    def make_move(self, Mover: Type[BaseMover]):
+        player = self.players[self.current_player]
+        legal_moves = self.board.get_legal_moves(player)
+        if legal_moves:
+            move = Mover.get_move(player, legal_moves)
+            self.state_count += 1
+            self.board.make_move(player, move)
+            self.display(self.current_player, move, with_score=True)
+        else:
+            print(f"Player {self.current_player} has no legal moves. Skipping turn.\n")
+        self.switch_player()
 
     def display(self, player_num=None, move=None, with_score=False):
         print()
@@ -75,8 +82,8 @@ class Game:
         print(f"Player 1: {score1} disks")
         print(f"Player 2: {score2} disks")
         if score1 > score2:
-            print("Player X wins!")
+            print("Player 1 wins!")
         elif score2 > score1:
-            print("Player O wins!")
+            print("Player 2 wins!")
         else:
             print("It's a tie!")
