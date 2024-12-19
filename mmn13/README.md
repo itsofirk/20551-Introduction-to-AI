@@ -107,3 +107,13 @@ ultimately leading to an optimal strategy for winning the game.
 6| X O - - - - - -  
 7| O X - - - - - -
 ```
+
+### Player Strategies
+
+The code introduces a `BaseMover` interface so that various move-selection strategies can be easily swapped in.
+
+1. `InteractiveMover`: Prompts moves directly from the user via the console.
+2. `RandomMover`: Picks moves uniformly at random, helpful for generating diverse states.
+3. `MethodicalMover`: Uses a simple numeric rule `(row % (col+1))` to deterministically choose moves.
+
+This modular design allows testing different approaches by simply changing the mover class.
